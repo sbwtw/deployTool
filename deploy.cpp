@@ -71,7 +71,7 @@ Deploy::~Deploy()
 void Deploy::chooseConfigFile()
 {
     QFileDialog chooser;
-    chooser.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+    chooser.setMimeTypeFilters(QStringList() << "text/csv");
     if (!chooser.exec())
         return;
 
