@@ -29,7 +29,7 @@ QVariant InfoModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
         return m_infoList[index.row()][index.column()];
 
-    if (role == Qt::CheckStateRole && index.column() == 0)
+    if (role == Qt::CheckStateRole && m_selectable && index.column() == 0)
         return m_selectedList.contains(m_infoList[index.row()]) ? Qt::Checked : Qt::Unchecked;
 
     return QVariant();

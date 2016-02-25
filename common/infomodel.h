@@ -12,12 +12,14 @@ public:
     void readInfoFile(const QString &file);
 
 public:
-    void selectByIndex(const QModelIndex &index);
     void sort(int column, Qt::SortOrder order);
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    inline void setSelectable(const bool selectable) {m_selectable = selectable;}
+    void selectByIndex(const QModelIndex &index);
     QList<QStringList> selectedList() const;
 //    QModelIndex index(int row, int column, const QModelIndex &parent) const;
 //    QModelIndex parent(const QModelIndex &child) const;
@@ -31,6 +33,8 @@ private:
 //    QMap<QString, Info *> m_infoList;
     QList<QStringList> m_selectedList;
     QList<QStringList> m_infoList;
+
+    bool m_selectable = true;
 };
 
 #endif // INFOMODEL_H
