@@ -17,6 +17,8 @@ private slots:
     void importFromFile();
     void exportToFile();
     void modifyItem();
+    void addInfoItem();
+    void deleteInfoItem();
 
 private:
     QMenuBar *m_menuBar;

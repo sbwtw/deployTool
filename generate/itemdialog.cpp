@@ -11,6 +11,7 @@ ItemDialog::ItemDialog(QWidget *parent) :
     m_type = new QComboBox;
     m_time = new QLineEdit;
     m_package = new QLineEdit;
+//    m_package->setReadOnly(true);
     m_choosePackageBtn = new QPushButton(tr("选择"));
     m_cancelBtn = new QPushButton(tr("取消"));
     m_confirmBtn = new QPushButton(tr("确定"));
@@ -40,4 +41,20 @@ ItemDialog::ItemDialog(QWidget *parent) :
     mainLayout->addLayout(btnLayout);
 
     setLayout(mainLayout);
+
+    connect(m_confirmBtn, &QPushButton::clicked, this, &ItemDialog::accept);
+    connect(m_cancelBtn, &QPushButton::clicked, this, &ItemDialog::close);
 }
+
+void ItemDialog::setTypeCategory(const QStringList &categoryList)
+{
+    m_type->clear();
+    m_type->addItems(categoryList);
+}
+
+void ItemDialog::setCurrentType(const int index)
+{
+    m_type->setCurrentIndex(index);
+}
+
+

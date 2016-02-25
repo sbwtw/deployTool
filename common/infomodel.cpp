@@ -7,7 +7,10 @@
 InfoModel::InfoModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-
+    m_categoryList = QStringList() << "电子白板"
+                                   << "投影机"
+                                   << "实物展台"
+                                   << "互动触摸显示屏";
 }
 
 int InfoModel::rowCount(const QModelIndex &parent) const
@@ -43,6 +46,15 @@ QVariant InfoModel::headerData(int section, Qt::Orientation orientation, int rol
     return QVariant();
 }
 
+void InfoModel::removeRow(int row, const QModelIndex &parent)
+{
+    beginRemoveRows(parent, row, row);
+    m_infoList.removeAt(row);
+    endRemoveRows();
+
+    QAbstractTableModel::removeRow(row, parent);
+}
+
 QList<QStringList> InfoModel::selectedList() const
 {
     return m_selectedList;
@@ -58,6 +70,27 @@ void InfoModel::selectByIndex(const QModelIndex &index)
         m_selectedList.append(list);
 
     emit dataChanged(index, index);
+}
+
+void InfoModel::appendInfoItem(const QString &company, const QString &package, const QString &type, const QString &time)
+{
+    const int rows = rowCount(QModelIndex());
+
+    beginInsertRows(QModelIndex(), rows, rows);
+    m_infoList.append(QStringList() << company << package << type << time);
+    endInsertRows();
+}
+
+void InfoModel::updateInfoItem(const QModelIndex &index, const QString &company, const QString &package, const QString &type, const QString &time)
+{
+    m_infoList[index.row()] = QStringList() << company << package << type << time;
+
+    emit dataChanged(index, index);
+}
+
+QStringList InfoModel::category() const
+{
+    return m_categoryList;
 }
 
 void InfoModel::sort(int column, Qt::SortOrder order)
@@ -76,7 +109,7 @@ void InfoModel::readInfoFile(const QString &file)
 {
     qDebug() << file;
     m_headerList.clear();
-    m_categoryList.clear();
+//    m_categoryList.clear();
     m_infoList.clear();
 
     QFile info(file);
@@ -96,8 +129,8 @@ void InfoModel::readInfoFile(const QString &file)
         if (itemInfo[1].isEmpty())
             continue;
 
-        if (!m_categoryList.contains(itemType))
-            m_categoryList.append(itemType);
+//        if (!m_categoryList.contains(itemType))
+//            m_categoryList.append(itemType);
 
         m_infoList.append(itemInfo);
     }

@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QFileDialog>
+#include <QHeaderView>
+#include <QModelIndex>
 
 Generate::Generate(QWidget *parent) :
     QMainWindow(parent)
@@ -19,6 +21,9 @@ Generate::Generate(QWidget *parent) :
     m_infoModel->setSelectable(false);
     m_infoView = new QTableView;
     m_infoView->setModel(m_infoModel);
+    m_infoView->verticalHeader()->hide();
+    m_infoView->setSortingEnabled(true);
+    m_infoView->setSelectionMode(QAbstractItemView::NoSelection);
     m_modifyBtn = new QPushButton(tr("修改"));
     m_deleteBtn = new QPushButton(tr("删除"));
     m_addBtn = new QPushButton(tr("添加"));
@@ -42,6 +47,10 @@ Generate::Generate(QWidget *parent) :
     connect(m_importAction, &QAction::triggered, this, &Generate::importFromFile);
     connect(m_exportAction, &QAction::triggered, this, &Generate::exportToFile);
     connect(m_modifyBtn, &QPushButton::clicked, this, &Generate::modifyItem);
+    connect(m_addBtn, &QPushButton::clicked, this, &Generate::addInfoItem);
+    connect(m_deleteBtn, &QPushButton::clicked, this, &Generate::deleteInfoItem);
+
+    m_infoModel->readInfoFile("/home/test.csv");
 }
 
 void Generate::importFromFile()
@@ -71,6 +80,33 @@ void Generate::exportToFile()
 
 void Generate::modifyItem()
 {
+    const QModelIndex currentIndex = m_infoView->currentIndex();
+    if (!currentIndex.isValid())
+        return;
+
     ItemDialog dia;
-    dia.exec();
+    dia.setTypeCategory(m_infoModel->category());
+    dia.setCompany(m_infoModel->data(currentIndex.sibling(currentIndex.row(), 0), Qt::DisplayRole).toString());
+    dia.setPackage(m_infoModel->data(currentIndex.sibling(currentIndex.row(), 1), Qt::DisplayRole).toString());
+    dia.setTime(m_infoModel->data(currentIndex.sibling(currentIndex.row(), 3), Qt::DisplayRole).toString());
+    dia.setCurrentType(m_infoModel->category().indexOf(m_infoModel->data(currentIndex.sibling(currentIndex.row(), 2), Qt::DisplayRole).toString()));
+    if (!dia.exec())
+        return;
+
+    m_infoModel->updateInfoItem(currentIndex, dia.company(), dia.package(), dia.type(), dia.time());
+}
+
+void Generate::addInfoItem()
+{
+    ItemDialog dia;
+    dia.setTypeCategory(m_infoModel->category());
+    if (!dia.exec())
+        return;
+
+    m_infoModel->appendInfoItem(dia.company(), dia.package(), dia.type(), dia.time());
+}
+
+void Generate::deleteInfoItem()
+{
+    m_infoModel->removeRow(m_infoView->currentIndex().row(), QModelIndex());
 }

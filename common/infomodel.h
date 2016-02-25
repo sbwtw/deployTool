@@ -19,7 +19,11 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     inline void setSelectable(const bool selectable) {m_selectable = selectable;}
+    void removeRow(int row, const QModelIndex &parent);
     void selectByIndex(const QModelIndex &index);
+    void appendInfoItem(const QString &company, const QString &package, const QString &type, const QString &time);
+    void updateInfoItem(const QModelIndex &index, const QString &company, const QString &package, const QString &type, const QString &time);
+    QStringList category() const;
     QList<QStringList> selectedList() const;
 //    QModelIndex index(int row, int column, const QModelIndex &parent) const;
 //    QModelIndex parent(const QModelIndex &child) const;
