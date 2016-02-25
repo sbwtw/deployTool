@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QFileDialog>
 
 ItemDialog::ItemDialog(QWidget *parent) :
     QDialog(parent)
@@ -44,6 +45,7 @@ ItemDialog::ItemDialog(QWidget *parent) :
 
     connect(m_confirmBtn, &QPushButton::clicked, this, &ItemDialog::accept);
     connect(m_cancelBtn, &QPushButton::clicked, this, &ItemDialog::close);
+    connect(m_choosePackageBtn, &QPushButton::clicked, this, &ItemDialog::choosePackageFile);
 }
 
 void ItemDialog::setTypeCategory(const QStringList &categoryList)
@@ -55,6 +57,20 @@ void ItemDialog::setTypeCategory(const QStringList &categoryList)
 void ItemDialog::setCurrentType(const int index)
 {
     m_type->setCurrentIndex(index);
+}
+
+void ItemDialog::choosePackageFile()
+{
+    QFileDialog chooser;
+    chooser.setMimeTypeFilters(QStringList() << "application/x-deb");
+    if (!chooser.exec())
+        return;
+
+    if (chooser.selectedFiles().isEmpty())
+        return;
+
+    const QString file = chooser.selectedFiles().first();
+    m_package->setText(file);
 }
 
 

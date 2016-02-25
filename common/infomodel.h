@@ -19,6 +19,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     inline void setSelectable(const bool selectable) {m_selectable = selectable;}
+    inline QString currentFile() const {return m_currentFile;}
     void removeRow(int row, const QModelIndex &parent);
     void selectByIndex(const QModelIndex &index);
     void appendInfoItem(const QString &company, const QString &package, const QString &type, const QString &time);
@@ -32,6 +33,7 @@ public:
 
 
 private:
+    QString m_currentFile;
     QStringList m_headerList;
     QStringList m_categoryList;
 //    QMap<QString, Info *> m_infoList;

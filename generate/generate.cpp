@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QModelIndex>
+#include <QDir>
 
 Generate::Generate(QWidget *parent) :
     QMainWindow(parent)
@@ -45,12 +46,14 @@ Generate::Generate(QWidget *parent) :
     move(qApp->primaryScreen()->geometry().center() - rect().center());
 
     connect(m_importAction, &QAction::triggered, this, &Generate::importFromFile);
-    connect(m_exportAction, &QAction::triggered, this, &Generate::exportToFile);
+    connect(m_exportAction, &QAction::triggered, this, &Generate::exportToFloder);
     connect(m_modifyBtn, &QPushButton::clicked, this, &Generate::modifyItem);
     connect(m_addBtn, &QPushButton::clicked, this, &Generate::addInfoItem);
     connect(m_deleteBtn, &QPushButton::clicked, this, &Generate::deleteInfoItem);
 
+#ifdef QT_DEBUG
     m_infoModel->readInfoFile("/home/test.csv");
+#endif
 }
 
 void Generate::importFromFile()
@@ -67,7 +70,7 @@ void Generate::importFromFile()
     m_infoModel->readInfoFile(file);
 }
 
-void Generate::exportToFile()
+void Generate::exportToFloder()
 {
     QFileDialog chooser;
     chooser.setFileMode(QFileDialog::DirectoryOnly);
@@ -75,7 +78,46 @@ void Generate::exportToFile()
     if (!chooser.exec())
         return;
 
-    const QString dir = chooser.selectedFiles().first();
+    const QDir currentDir = chooser.selectedFiles().first();
+    QFile file(currentDir.absoluteFilePath("Deploy.csv"));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return;
+    QTextStream stream(&file);
+    stream << tr("厂商,软件包,应用类型,期数") << endl;
+
+    const int row = m_infoModel->rowCount(QModelIndex());
+    for (int i(0); i != row; ++i)
+    {
+        stream << m_infoModel->data(m_infoModel->index(i, 0), Qt::DisplayRole).toString() << ',';
+        stream << m_infoModel->data(m_infoModel->index(i, 0), Qt::DisplayRole).toString() + '/' +
+                  QFileInfo(m_infoModel->data(m_infoModel->index(i, 1), Qt::DisplayRole).toString()).fileName() << ',';
+        stream << m_infoModel->data(m_infoModel->index(i, 2), Qt::DisplayRole).toString() << ',';
+        stream << m_infoModel->data(m_infoModel->index(i, 3), Qt::DisplayRole).toString() << endl;
+    }
+
+    // copy all package to destination floder
+
+    QDir sourceDir(m_infoModel->currentFile());
+    sourceDir.cdUp();
+
+    for (int i(0); i != row; ++i)
+    {
+        const QString fileName = m_infoModel->data(m_infoModel->index(i, 1), Qt::DisplayRole).toString();
+        const QString sourceFile = sourceDir.absoluteFilePath(fileName);
+        QDir newDir = currentDir.path();
+        newDir.mkpath(m_infoModel->data(m_infoModel->index(i, 0), Qt::DisplayRole).toString());
+        newDir.cd(m_infoModel->data(m_infoModel->index(i, 0), Qt::DisplayRole).toString());
+
+        QString destFile;
+        if (fileName.contains('/'))
+            destFile = newDir.absoluteFilePath(QFileInfo(fileName).fileName());
+        else
+            destFile = newDir.absoluteFilePath(fileName);
+
+        qDebug() << sourceFile << " -> " << destFile;
+
+        QFile::copy(sourceFile, destFile);
+    }
 }
 
 void Generate::modifyItem()

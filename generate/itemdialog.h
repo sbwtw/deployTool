@@ -20,12 +20,14 @@ public:
     inline void setPackage(const QString &package) {m_package->setText(package);}
     inline const QString type() const {return m_type->currentText();}
 
+private slots:
+    void choosePackageFile();
+
 private:
     QLineEdit *m_company;
     QComboBox *m_type;
     QLineEdit *m_time;
     QLineEdit *m_package;
-    QPushButton *m_choosePackage;
     QPushButton *m_confirmBtn;
     QPushButton *m_cancelBtn;
     QPushButton *m_choosePackageBtn;

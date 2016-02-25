@@ -29,6 +29,10 @@ int InfoModel::columnCount(const QModelIndex &parent) const
 
 QVariant InfoModel::data(const QModelIndex &index, int role) const
 {
+//    qDebug() << index;
+    if (!index.isValid())
+        return QVariant();
+
     if (role == Qt::DisplayRole)
         return m_infoList[index.row()][index.column()];
 
@@ -111,6 +115,7 @@ void InfoModel::readInfoFile(const QString &file)
     m_headerList.clear();
 //    m_categoryList.clear();
     m_infoList.clear();
+    m_currentFile = file;
 
     QFile info(file);
     if (!info.open(QIODevice::ReadOnly))

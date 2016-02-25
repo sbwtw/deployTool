@@ -15,7 +15,7 @@ public:
 
 private slots:
     void importFromFile();
-    void exportToFile();
+    void exportToFloder();
     void modifyItem();
     void addInfoItem();
     void deleteInfoItem();
