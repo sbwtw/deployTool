@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Encoding=UTF-8
+Name=应用部署数据整理工具
+Comment=应用部署数据整理工具
+GenericName=Generate
+Exec=Generate
+Icon=preferences-system
+Terminal=false
+Categories=Applications;System
