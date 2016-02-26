@@ -2,8 +2,8 @@
 Type=Application
 Version=1.0
 Encoding=UTF-8
-Name=应用部署向导
-Comment=应用部署向导
+Name=应用部署安装向导
+Comment=应用部署安装向导
 GenericName=Deploy
 Exec=Deploy
 Icon=preferences-system
