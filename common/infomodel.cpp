@@ -132,6 +132,8 @@ void InfoModel::readInfoFile(const QString &file)
     QString itemType;
 
 //    m_headerList = stream.readLine().split(',');
+    // pass first line
+    stream.readLine();
 
     while (!stream.atEnd()) {
         itemInfo = stream.readLine().split(',');
