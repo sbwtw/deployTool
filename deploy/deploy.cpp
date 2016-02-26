@@ -26,6 +26,7 @@ Deploy::Deploy(QWidget *parent) :
     m_infoView->setSortingEnabled(true);
     m_infoView->setSelectionMode(QAbstractItemView::NoSelection);
     m_deployDetail = new QPlainTextEdit;
+    m_deployDetail->setReadOnly(true);
 
     QHBoxLayout *fileChooseLayout = new QHBoxLayout;
     fileChooseLayout->addWidget(m_filePathEdit);
@@ -142,6 +143,9 @@ void Deploy::startDeploy()
     qDebug() << "args: " << args;
 
     QProcess *process = new QProcess;
+    connect(process, &QProcess::readyReadStandardOutput, [process, this] {
+        m_deployDetail->appendPlainText(process->readAllStandardOutput());
+    });
     connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished), [process, this] (int ret) {
 
         if (!ret) {
