@@ -12,7 +12,7 @@ ItemDialog::ItemDialog(QWidget *parent) :
     m_type = new QComboBox;
     m_time = new QLineEdit;
     m_package = new QLineEdit;
-//    m_package->setReadOnly(true);
+    m_package->setReadOnly(true);
     m_choosePackageBtn = new QPushButton(tr("选择"));
     m_cancelBtn = new QPushButton(tr("取消"));
     m_confirmBtn = new QPushButton(tr("确定"));

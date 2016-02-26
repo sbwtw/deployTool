@@ -11,6 +11,11 @@ InfoModel::InfoModel(QObject *parent)
                                    << "投影机"
                                    << "实物展台"
                                    << "互动触摸显示屏";
+
+    m_headerList = QStringList() << "厂商"
+                                 << "软件包"
+                                 << "应用类型"
+                                 << "期数";
 }
 
 int InfoModel::rowCount(const QModelIndex &parent) const
@@ -30,6 +35,7 @@ int InfoModel::columnCount(const QModelIndex &parent) const
 QVariant InfoModel::data(const QModelIndex &index, int role) const
 {
 //    qDebug() << index;
+
     if (!index.isValid())
         return QVariant();
 
@@ -112,7 +118,7 @@ void InfoModel::sort(int column, Qt::SortOrder order)
 void InfoModel::readInfoFile(const QString &file)
 {
     qDebug() << file;
-    m_headerList.clear();
+//    m_headerList.clear();
 //    m_categoryList.clear();
     m_infoList.clear();
     m_currentFile = file;
@@ -125,7 +131,7 @@ void InfoModel::readInfoFile(const QString &file)
     QStringList itemInfo;
     QString itemType;
 
-    m_headerList = stream.readLine().split(',');
+//    m_headerList = stream.readLine().split(',');
 
     while (!stream.atEnd()) {
         itemInfo = stream.readLine().split(',');
