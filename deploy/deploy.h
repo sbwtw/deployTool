@@ -2,12 +2,14 @@
 #define DEPLOY_H
 
 #include "infomodel.h"
+#include "categoryinfomodel.h"
 
 #include <QFrame>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QFileDialog>
 #include <QTableView>
+#include <QLabel>
 #include <QPlainTextEdit>
 
 class Deploy : public QFrame
@@ -19,20 +21,28 @@ public:
     ~Deploy();
 
 private slots:
-    void chooseConfigFile();
     void confirmSelectedList();
     void showInfoView();
     void startDeploy();
+    void readFile();
 
 private:
-    QLineEdit *m_filePathEdit;
-    QPushButton *m_fileChooseBtn;
+    QTableView *m_infoView1;
+    QTableView *m_infoView2;
+    QTableView *m_infoView3;
+    QTableView *m_infoView4;
+    CategoryInfoModel *m_cateModel1;
+    CategoryInfoModel *m_cateModel2;
+    CategoryInfoModel *m_cateModel3;
+    CategoryInfoModel *m_cateModel4;
+    QLabel *m_label1;
+    QLabel *m_label2;
+    QLabel *m_label3;
+    QLabel *m_label4;
     QPushButton *m_nextStepBtn;
     QPushButton *m_prevStepBtn;
     QPushButton *m_deployBtn;
     QPushButton *m_exitBtn;
-    QTableView *m_infoView;
-    InfoModel *m_infoModel;
     QPlainTextEdit *m_deployDetail;
 };
 
