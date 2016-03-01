@@ -49,10 +49,12 @@ int CategoryInfoModel::columnCount(const QModelIndex &parent) const
 
 QVariant CategoryInfoModel::data(const QModelIndex &index, int role) const
 {
+    static int convert[] = {0, 2, 1};
+
     switch (role)
     {
     case Qt::DisplayRole:
-        return m_data[index.row()][index.column()];
+        return m_data[index.row()][convert[index.column()]];
     case Qt::CheckStateRole:
         if (index.column())
             return QVariant();
@@ -74,8 +76,8 @@ QVariant CategoryInfoModel::headerData(int section, Qt::Orientation orientation,
         switch (section)
         {
         case 0:     return "厂家";        break;
-        case 1:     return "Deb 包";     break;
-        case 2:     return "期数";        break;
+        case 2:     return "Deb 包";     break;
+        case 1:     return "期数";        break;
         default:    return QVariant();
         }
     default:

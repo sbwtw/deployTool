@@ -19,7 +19,7 @@ Deploy::Deploy(QWidget *parent) :
     m_deployDetail = new QPlainTextEdit;
     m_deployDetail->setReadOnly(true);
 
-    m_label1 = new QLabel(tr("投影机"));
+    m_label1 = new QLabel(tr("投影仪"));
     m_cateModel1 = new CategoryInfoModel;
     m_infoView1 = new QTableView;
     m_infoView1->setModel(m_cateModel1);
@@ -216,12 +216,14 @@ void Deploy::readFile()
         itemInfo.removeAt(2);
 
         if (!itemType.compare(tr("电子白板")))
-            m_cateModel1->append(itemInfo);
-        else if (!itemType.compare(tr("投影机")))
             m_cateModel2->append(itemInfo);
+        else if (!itemType.compare(tr("投影仪")))
+            m_cateModel1->append(itemInfo);
         else if (!itemType.compare(tr("实物展台")))
             m_cateModel3->append(itemInfo);
-        else
+        else if (!itemType.compare(tr("互动触摸显示屏")))
             m_cateModel4->append(itemInfo);
+        else
+            qDebug() << itemType << itemInfo;
     }
 }
