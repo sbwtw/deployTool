@@ -25,6 +25,7 @@ private slots:
     void showInfoView();
     void startDeploy();
     void readFile();
+    void chooseFile();
 
 private:
     QTableView *m_infoView1;
@@ -44,6 +45,8 @@ private:
     QPushButton *m_deployBtn;
     QPushButton *m_exitBtn;
     QPlainTextEdit *m_deployDetail;
+    QLineEdit *m_fileLineEdit;
+    QPushButton *m_fileChooseBtn;
 };
 
 #endif // DEPLOY_H

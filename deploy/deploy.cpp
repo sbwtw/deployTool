@@ -1,3 +1,6 @@
+
+#include <gtk/gtk.h>
+
 #include "deploy.h"
 
 #include <QApplication>
@@ -64,7 +67,16 @@ Deploy::Deploy(QWidget *parent) :
     toolBarLayout->addWidget(m_deployBtn);
     toolBarLayout->addWidget(m_exitBtn);
 
+    m_fileLineEdit = new QLineEdit;
+    m_fileLineEdit->setReadOnly(true);
+    m_fileChooseBtn = new QPushButton(tr("浏览"));
+
+    QHBoxLayout *fileChooseLayout = new QHBoxLayout;
+    fileChooseLayout->addWidget(m_fileLineEdit);
+    fileChooseLayout->addWidget(m_fileChooseBtn);
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(fileChooseLayout);
     mainLayout->addLayout(viewsLayout);
     mainLayout->addWidget(m_deployDetail);
     mainLayout->addLayout(toolBarLayout);
@@ -81,9 +93,12 @@ Deploy::Deploy(QWidget *parent) :
     connect(m_deployBtn, &QPushButton::clicked, this, &Deploy::startDeploy);
     connect(m_prevStepBtn, &QPushButton::clicked, this, &Deploy::showInfoView);
     connect(m_nextStepBtn, &QPushButton::clicked, this, &Deploy::confirmSelectedList);
+    connect(m_fileChooseBtn, &QPushButton::clicked, this, &Deploy::chooseFile);
 
     showInfoView();
-    readFile();
+//    readFile();
+
+    gtk_init(nullptr, nullptr);
 }
 
 Deploy::~Deploy()
@@ -195,7 +210,8 @@ void Deploy::startDeploy()
 
 void Deploy::readFile()
 {
-    QFile info(qApp->applicationDirPath() + "/Deploy.csv");
+    QFile info(m_fileLineEdit->text());
+//    QFile info(qApp->applicationDirPath() + "/Deploy.csv");
     if (!info.open(QIODevice::ReadOnly))
         return;
 
@@ -208,6 +224,9 @@ void Deploy::readFile()
 
     while (!stream.atEnd()) {
         itemInfo = stream.readLine().split(',');
+        if (itemInfo.size() != 4)
+            continue;
+
         itemType = itemInfo[2];
 
         if (itemInfo[1].isEmpty())
@@ -226,4 +245,23 @@ void Deploy::readFile()
         else
             qDebug() << itemType << itemInfo;
     }
+}
+
+void Deploy::chooseFile()
+{
+    GtkWidget *dialog;
+    dialog = gtk_file_chooser_dialog_new("Choose File",
+                                         nullptr,
+                                         GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                         nullptr);
+
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+        char *fileName = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        m_fileLineEdit->setText(fileName);
+        g_free(fileName);
+    }
+
+    gtk_widget_destroy(dialog);
+    readFile();
 }
