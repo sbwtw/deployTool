@@ -1,0 +1,19 @@
+Source: deploytool
+Section: utils
+Priority: optional
+Maintainer: Deepin Packages Builder <packages@linuxdeepin.com>
+Build-Depends: debhelper (>=9), qt5-qmake, qt5-default, qtbase5-dev, pkg-config, libqt5gui5, libgtk2.0-dev,
+Standards-Version: 3.9.6
+Homepage: http://www.deepin.org
+
+Package: deploytool
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
+
+Package: deploytool-generate
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>

@@ -1,0 +1,29 @@
+deploytool (1.4) unstable; urgency=medium
+
+  * update. 
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Tue, 01 Mar 2016 17:40:53 +0800
+
+deploytool (1.3) unstable; urgency=medium
+
+  * update. 
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Tue, 01 Mar 2016 14:33:34 +0800
+
+deploytool (1.2) unstable; urgency=medium
+
+  * update. 
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Tue, 01 Mar 2016 11:13:31 +0800
+
+deploytool (1.1) unstable; urgency=medium
+
+  * update 
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Tue, 01 Mar 2016 09:41:07 +0800
+
+deploytool (1.0) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Wed, 24 Feb 2016 16:26:56 +0800
