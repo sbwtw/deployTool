@@ -164,8 +164,13 @@ void Deploy::startDeploy()
 {
     m_deployDetail->appendPlainText("开始部署...\n");
 
-    QDir dir(qApp->applicationDirPath());
-//    dir.cdUp();
+    QDir dir;
+    if (QFile(m_fileLineEdit->text()).exists()) {
+        dir = QDir(m_fileLineEdit->text());
+        dir.cdUp();
+    } else {
+        dir = QDir(qApp->applicationDirPath());
+    }
 
     QStringList fileList;
 
